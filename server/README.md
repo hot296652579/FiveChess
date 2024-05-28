@@ -2,7 +2,7 @@
  * @Author: super_javan 296652579@qq.com
  * @Date: 2024-05-28 12:40:09
  * @LastEditors: super_javan 296652579@qq.com
- * @LastEditTime: 2024-05-28 13:37:37
+ * @LastEditTime: 2024-05-28 19:09:01
  * @FilePath: /FiveChess/server/README.md
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -25,6 +25,9 @@ npm install -g typescript @types/node
 
  # 安装日志打印依赖
  npm install --save log4js @types/log4js
+
+ # 安装uuid 唯一标识符
+ npm i -save-dev uuid @types/uuid
 
  
 
