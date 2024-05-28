@@ -1,0 +1,13 @@
+{
+  "compilerOptions": {
+    "target": "es2016", /* Set the JavaScript language version for emitted JavaScript and include compatible library declarations. */
+    "module": "commonjs", /* Specify what module code is generated. */
+    "forceConsistentCasingInFileNames": true, /* Ensure that casing is correct in imports. */
+    /* Type Checking */
+    "strict": true, /* Enable all strict type-checking options. */
+    /* Completeness */
+    "skipLibCheck": true, /* Skip type checking all .d.ts files. */
+    "outDir": "dist/", /**重定向输出目录编译生成js文件 放在dist文件下*/
+  },
+  // "include": []
+}

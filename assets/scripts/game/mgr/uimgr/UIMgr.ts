@@ -2,7 +2,7 @@
  * @Author: super_javan 296652579@qq.com
  * @Date: 2024-05-27 20:47:04
  * @LastEditors: super_javan 296652579@qq.com
- * @LastEditTime: 2024-05-28 10:51:22
+ * @LastEditTime: 2024-05-28 11:53:47
  * @FilePath: /FiveChess/assets/scripts/game/mgr/uimgr/UIMgr.ts
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -49,15 +49,15 @@ export class UIMgr extends Single {
                 console.error('加载ToastView预设失败 err:', err);
                 return;
             }
-            const popView = instantiate(prefab);
-            popView.name = 'ToastView';
-            let toastViewScript = popView.getComponent(ToastView);
+            const toastView = instantiate(prefab);
+            toastView.name = 'ToastView';
+            let toastViewScript = toastView.getComponent(ToastView);
             toastViewScript.showTips(content);
 
             if (parentNode) {
-                popView.parent = parentNode;
+                toastView.parent = parentNode;
             } else {
-                popView.parent = find("Canvas");
+                toastView.parent = find("Canvas");
             }
         })
     }

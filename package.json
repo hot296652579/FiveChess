@@ -3,5 +3,9 @@
   "uuid": "a829e578-a92c-48fa-be31-19877210226a",
   "creator": {
     "version": "3.8.1"
+  },
+  "dependencies": {
+    "@types/node": "^20.12.12",
+    "typescript": "^5.4.5"
   }
 }
