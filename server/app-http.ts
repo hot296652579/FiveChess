@@ -2,7 +2,7 @@
  * @Author: super_javan 296652579@qq.com
  * @Date: 2024-05-28 12:58:13
  * @LastEditors: super_javan 296652579@qq.com
- * @LastEditTime: 2024-05-28 21:39:59
+ * @LastEditTime: 2024-05-29 11:01:22
  * @FilePath: /FiveChess/server/app-http.ts
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -34,7 +34,8 @@ export const httpServerStart = async () => {
     })
 
     app.listen(HostConfig.AuthHttpPort, () => {
-        loggerMgr.info(TAG, 'http server start at 3000')
+        loggerMgr.info(TAG, 'http server start at 3000');
+        // console.log('http server start at 3000');
     })
 }
 

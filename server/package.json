@@ -2,9 +2,12 @@
   "name": "server",
   "version": "1.0.0",
   "description": "five chess game server",
-  "main": "index.js",
+  "main": "app.ts",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "http-start": "npx ts-node app-http.ts",
+    "ws-start": "npx ts-node app-ws.ts",
+    "publish-http": "npx ts-node app-http.ts",
+    "publish-ws": "npx ts-node app-ws.ts"
   },
   "keywords": [],
   "author": "",
@@ -27,6 +30,7 @@
     "@types/log4js": "^2.3.5",
     "@types/mysql": "^2.15.26",
     "log4js": "^6.9.1",
-    "mysql": "^2.18.1"
+    "mysql": "^2.18.1",
+    "ts-node": "^10.9.2"
   }
 }
