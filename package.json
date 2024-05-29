@@ -6,6 +6,8 @@
   },
   "dependencies": {
     "@types/node": "^20.12.12",
+    "jsencrypt": "^3.3.2",
+    "node-jsencrypt": "^1.0.0",
     "typescript": "^5.4.5"
   }
 }
