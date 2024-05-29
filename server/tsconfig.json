@@ -7,6 +7,8 @@
     "strict": true, /* Enable all strict type-checking options. */
     /* Completeness */
     "skipLibCheck": true, /* Skip type checking all .d.ts files. */
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
     "outDir": "dist/", /**重定向输出目录编译生成js文件 放在dist文件下*/
   },
   // "include": []
