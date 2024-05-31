@@ -2,19 +2,22 @@
  * @Author: super_javan 296652579@qq.com
  * @Date: 2024-05-27 16:47:25
  * @LastEditors: super_javan 296652579@qq.com
- * @LastEditTime: 2024-05-30 20:42:15
+ * @LastEditTime: 2024-05-31 18:34:06
  * @FilePath: /FiveChess/assets/scripts/game/views/LoginView.ts
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
 import { _decorator, Component, EditBox, Node } from 'cc';
 import { GameUtils } from '../common/GameUtils';
-import { GameEventName, GameLanguageKey } from '../common/GameConst';
-import { EventMgr } from '../core/base/EventMgr';
+import { GameEventName, GameLanguageKey, NetCodeConst } from '../common/GameConst';
+import { eventMgr, EventMgr } from '../core/base/EventMgr';
 import { ToastView } from './ToastView';
 import { httpMgr } from '../core/base/HttpMgr';
 import { GameHost } from '../common/GameHost';
 import JSEncrypt from 'jsencrypt';
 import { JsCrypt_PublicKey } from '../common/GameSecret';
+import { GamePlayerData } from '../data/GamePlayerData';
+import { GameData } from '../data/GameData';
+import { GaneEvent } from '../common/GaneEvent';
 const { ccclass, property } = _decorator;
 
 const TAG = 'LoginView';
@@ -66,6 +69,31 @@ export class LoginView extends Component {
         }
         const res = await httpMgr.requestPost(GameHost.gameUserLoginUrl, params);
         console.log(TAG, '请求登录返回数据 res', JSON.stringify(res));
+
+        let data = res.data;
+        let code = res.code as number;
+        let msg = res.msg as string;
+        if (code == NetCodeConst.LoginSuccess) {
+            let playerData = new GamePlayerData();
+            playerData.password = password as string;
+            playerData.uname = originUserName as string;
+            playerData.uid = data.token;
+
+            GameData.getIns().curPlayerData = playerData;
+            // this._showToast(message);
+            eventMgr.emit(GaneEvent.UI_LoginRegisterSuccess, { result: true, msg });
+        } else {
+            // this._showToast(message);
+            eventMgr.emit(GaneEvent.UI_LoginRegisterFail, { result: false, msg });
+        }
+    }
+
+    private _showToast(msg: string) {
+        if (GameUtils.isCheckStringEmpty(msg))
+            return;
+
+        this.toastView.active = true;
+        this.toastView.getComponent(ToastView).showTips(msg);
     }
 
     /**
@@ -94,6 +122,23 @@ export class LoginView extends Component {
         }
         const res = await httpMgr.requestPost(GameHost.gameUserRegisterUrl, params);
         console.log(TAG, '请求注册返回数据 res', JSON.stringify(res));
+
+        let data = res.data;
+        let code = res.code as number;
+        let msg = res.msg as string;
+        if (code == NetCodeConst.RegisterSuccess) {
+            let playerData = new GamePlayerData();
+            playerData.password = password as string;
+            playerData.uname = originUserName as string;
+            playerData.uid = data.token;
+
+            GameData.getIns().curPlayerData = playerData;
+            // this._showToast(message);
+            eventMgr.emit(GaneEvent.UI_LoginRegisterSuccess, { result: true, msg });
+        } else {
+            // this._showToast(message);
+            eventMgr.emit(GaneEvent.UI_LoginRegisterFail, { result: false, msg });
+        }
     }
 }
 

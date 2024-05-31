@@ -2,7 +2,7 @@
  * @Author: super_javan 296652579@qq.com
  * @Date: 2024-05-28 11:31:10
  * @LastEditors: super_javan 296652579@qq.com
- * @LastEditTime: 2024-05-28 12:28:13
+ * @LastEditTime: 2024-05-31 16:44:44
  * @FilePath: /FiveChess/assets/scripts/game/core/base/EventMgr.ts
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -73,3 +73,6 @@ export class EventMgr extends Single {
         cbs.length = 0;
     }
 }
+
+let eventMgr = EventMgr.getIns();
+export { eventMgr };
