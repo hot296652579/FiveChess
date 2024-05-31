@@ -2,7 +2,7 @@
  * @Author: super_javan 296652579@qq.com
  * @Date: 2024-05-28 12:58:13
  * @LastEditors: super_javan 296652579@qq.com
- * @LastEditTime: 2024-05-30 20:30:02
+ * @LastEditTime: 2024-05-31 13:44:22
  * @FilePath: /FiveChess/server/app-http.ts
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -30,15 +30,15 @@ export const httpServerStart = async () => {
     app.use(bodyParser.urlencoded({ extended: true }));
     app.use(cookieParser());
 
-    // app.use(function (req, res, next) {
-    //     next(createHttpError(404));//指定错误的网页
-    // })
+    app.use(function (req, res, next) {
+        next(createHttpError(404));//指定错误的网页
+    })
 
     //绑定用户操作
-    // app.use('/api/users', UserRoutes);
-    app.post('/api/users/register', (req, res) => {
-        loggerMgr.info(TAG, '客户端有注册请求+++++');
-    });
+    app.use('/api/users', UserRoutes);
+    // app.post('/api/users/register', (req, res) => {
+    //     loggerMgr.info(TAG, '客户端有注册请求+++++');
+    // });
 
     app.listen(HostConfig.AuthHttpPort, () => {
         loggerMgr.info(TAG, 'http server start at 3000');

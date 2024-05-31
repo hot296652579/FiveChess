@@ -2,7 +2,7 @@
  * @Author: super_javan 296652579@qq.com
  * @Date: 2024-05-29 15:47:57
  * @LastEditors: super_javan 296652579@qq.com
- * @LastEditTime: 2024-05-30 19:42:11
+ * @LastEditTime: 2024-05-30 20:57:19
  * @FilePath: /FiveChess/server/src/game/http/HttpMiddleWare.ts
  * @Description: 加密解密中间件,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -20,7 +20,7 @@ const TAG = "HttpMiddleWare";
 const crypt = new JSEncrypt();
 crypt.setKey(JsCrypt_PrivateKey);
 crypt.setPrivateKey(JsCrypt_PrivateKey);
-crypt.setPublicKey(JsCrypt_PublicKey);
+crypt.setPublicKey(JsCrypt_PrivateKey);
 
 /**
  * @description: 中间件方法，加密的数据解密后放回body
