@@ -2,13 +2,13 @@
  * @Author: super_javan 296652579@qq.com
  * @Date: 2024-05-27 16:47:25
  * @LastEditors: super_javan 296652579@qq.com
- * @LastEditTime: 2024-06-02 21:23:05
+ * @LastEditTime: 2024-06-02 21:47:03
  * @FilePath: /FiveChess/assets/scripts/game/views/LoginView.ts
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
 import { _decorator, Component, EditBox, Node } from 'cc';
 import { GameUtils } from '../common/GameUtils';
-import { GameEventName, GameLanguageKey, NetCodeConst } from '../common/GameConst';
+import { GameLanguageKey, NetCodeConst } from '../common/GameConst';
 import { eventMgr, EventMgr } from '../core/base/EventMgr';
 import { ToastView } from './ToastView';
 import { httpMgr } from '../core/base/HttpMgr';
