@@ -54,7 +54,7 @@
     },
     "autoReleaseAssets": false,
     "_globals": {
-      "__id__": 55
+      "__id__": 57
     },
     "_id": "ba0ec276-e098-4421-946c-82e6ebfea141"
   },
@@ -824,6 +824,9 @@
     "selectGameNode": {
       "__id__": 14
     },
+    "createRoomNode": {
+      "__id__": 23
+    },
     "joinRoomEditBox": null,
     "_id": "e6hn4NF4VC8LoDL2mP8dNc"
   },
@@ -839,6 +842,9 @@
       },
       {
         "__id__": 52
+      },
+      {
+        "__id__": 55
       }
     ],
     "nestedPrefabInstanceRoots": [
@@ -914,30 +920,52 @@
     ]
   },
   {
+    "__type__": "cc.TargetOverrideInfo",
+    "source": {
+      "__id__": 47
+    },
+    "sourceInfo": null,
+    "propertyPath": [
+      "joinRoomEditBox"
+    ],
+    "target": {
+      "__id__": 23
+    },
+    "targetInfo": {
+      "__id__": 56
+    }
+  },
+  {
+    "__type__": "cc.TargetInfo",
+    "localID": [
+      "57XIr7UIBAmIr0eZw6/f89"
+    ]
+  },
+  {
     "__type__": "cc.SceneGlobals",
     "ambient": {
-      "__id__": 56
-    },
-    "shadows": {
-      "__id__": 57
-    },
-    "_skybox": {
       "__id__": 58
     },
-    "fog": {
+    "shadows": {
       "__id__": 59
     },
-    "octree": {
+    "_skybox": {
       "__id__": 60
     },
-    "skin": {
+    "fog": {
       "__id__": 61
     },
-    "lightProbeInfo": {
+    "octree": {
       "__id__": 62
     },
-    "postSettings": {
+    "skin": {
       "__id__": 63
+    },
+    "lightProbeInfo": {
+      "__id__": 64
+    },
+    "postSettings": {
+      "__id__": 65
     },
     "bakedWithStationaryMainLight": false,
     "bakedWithHighpLightmap": false
@@ -1001,6 +1029,7 @@
       "z": 0
     },
     "_distance": 0,
+    "_planeBias": 1,
     "_shadowColor": {
       "__type__": "cc.Color",
       "r": 76,
