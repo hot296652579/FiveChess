@@ -11,7 +11,7 @@ import { uimgr, UIMgr } from './mgr/uimgr/UIMgr';
 import { IPopViewData } from './views/PopView';
 import { eventMgr, EventMgr } from './core/base/EventMgr';
 import { GameEnvType, GameLanguageKey } from './common/GameConst';
-import { GaneEvent } from './common/GaneEvent';
+import { GaneEvent } from './common/GameEvent';
 import { GameData } from './data/GameData';
 import { GameConfig } from '../../GameConfig';
 import { GameUtils } from './common/GameUtils';

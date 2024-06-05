@@ -12,7 +12,7 @@ import { GameData } from "../data/GameData";
 import { GameModelType, GameSceneName } from "../common/GameConst";
 import { GameUtils } from "../common/GameUtils";
 import { eventMgr } from "../core/base/EventMgr";
-import { GaneEvent } from "../common/GaneEvent";
+import { GameEvent } from "../common/GameEvent";
 
 const { ccclass, property } = _decorator;
 
@@ -33,7 +33,7 @@ export class CreateRoomView extends Component {
 
     public onClickSelf(): void {
         this.node.active = false;
-        eventMgr.emit(GaneEvent.UI_CloseCreateRoom);
+        eventMgr.emit(GameEvent.UI_CloseCreateRoom);
     }
 
 

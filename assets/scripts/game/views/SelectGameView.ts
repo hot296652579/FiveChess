@@ -12,7 +12,7 @@ import { GameData } from "../data/GameData";
 import { GameModelType, GameSceneName } from "../common/GameConst";
 import { GameUtils } from "../common/GameUtils";
 import { eventMgr } from "../core/base/EventMgr";
-import { GaneEvent } from "../common/GaneEvent";
+import { GaneEvent } from "../common/GameEvent";
 
 const { ccclass, property } = _decorator;
 

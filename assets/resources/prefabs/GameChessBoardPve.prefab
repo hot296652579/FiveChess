@@ -2110,6 +2110,10 @@
     "tipNode": {
       "__id__": 32
     },
+    "chessPiecesPrefab": {
+      "__uuid__": "16f59f2c-cb57-41fa-9391-fe8513e9a2ee",
+      "__expectedType__": "cc.Prefab"
+    },
     "_id": ""
   },
   {

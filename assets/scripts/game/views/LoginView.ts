@@ -17,7 +17,7 @@ import JSEncrypt from 'jsencrypt';
 import { JsCrypt_PublicKey } from '../common/GameSecret';
 import { GamePlayerData } from '../data/GamePlayerData';
 import { GameData } from '../data/GameData';
-import { GaneEvent } from '../common/GaneEvent';
+import { GameEvent } from '../common/GameEvent';
 const { ccclass, property } = _decorator;
 
 const TAG = 'LoginView';
@@ -80,9 +80,9 @@ export class LoginView extends Component {
             playerData.uid = data.token;
 
             GameData.getIns().curPlayerData = playerData;
-            eventMgr.emit(GaneEvent.UI_LoginRegisterSuccess, { result: true, msg });
+            eventMgr.emit(GameEvent.UI_LoginRegisterSuccess, { result: true, msg });
         } else {
-            eventMgr.emit(GaneEvent.UI_LoginRegisterFail, { result: false, msg });
+            eventMgr.emit(GameEvent.UI_LoginRegisterFail, { result: false, msg });
         }
     }
 
@@ -132,10 +132,10 @@ export class LoginView extends Component {
 
             GameData.getIns().curPlayerData = playerData;
             // this._showToast(message);
-            eventMgr.emit(GaneEvent.UI_LoginRegisterSuccess, { result: true, msg });
+            eventMgr.emit(GameEvent.UI_LoginRegisterSuccess, { result: true, msg });
         } else {
             // this._showToast(message);
-            eventMgr.emit(GaneEvent.UI_LoginRegisterFail, { result: false, msg });
+            eventMgr.emit(GameEvent.UI_LoginRegisterFail, { result: false, msg });
         }
     }
 }

@@ -2,7 +2,7 @@
  * @Author: super_javan 296652579@qq.com
  * @Date: 2024-06-04 16:31:22
  * @LastEditors: super_javan 296652579@qq.com
- * @LastEditTime: 2024-06-04 20:47:21
+ * @LastEditTime: 2024-06-05 20:00:29
  * @FilePath: /FiveChess/assets/scripts/game/views/ChessPieces.ts
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -10,7 +10,7 @@ import { _decorator, Component, EventTouch, Node, NodeEventType } from 'cc';
 import { ChessPiecesType, GameRoleType } from '../common/GameConst';
 import { GameData } from '../data/GameData';
 import { eventMgr } from '../core/base/EventMgr';
-import { GaneEvent } from '../common/GaneEvent';
+import { GameEvent } from '../common/GameEvent';
 const { ccclass, property } = _decorator;
 
 const TAG = 'ChessPieces';
@@ -32,8 +32,8 @@ export class ChessPieces extends Component {
     start() {
         this._initEvent();
 
-        this._setPieceBlackIsShow(false);
-        this._setPieceWhiteIsShow(false);
+        this._setPieceBlackIsShow(true);
+        // this._setPieceWhiteIsShow(false);
     }
 
     private _initEvent() {
@@ -70,7 +70,7 @@ export class ChessPieces extends Component {
         }
 
         this._setChessPieceColorShowByChessPiecesType(this._curChessPieceType);
-        eventMgr.emit(GaneEvent.UI_ClickPutDownChessPiece, { index: this._index, row: this._row, col: this._col, chessPieceType: this._curChessPieceType });
+        eventMgr.emit(GameEvent.UI_ClickPutDownChessPiece, { index: this._index, row: this._row, col: this._col, chessPieceType: this._curChessPieceType });
     }
 
     /**
