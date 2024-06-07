@@ -2,7 +2,7 @@
  * @Author: super_javan 296652579@qq.com
  * @Date: 2024-06-04 16:31:22
  * @LastEditors: super_javan 296652579@qq.com
- * @LastEditTime: 2024-06-05 20:00:29
+ * @LastEditTime: 2024-06-05 20:35:38
  * @FilePath: /FiveChess/assets/scripts/game/views/ChessPieces.ts
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -32,8 +32,8 @@ export class ChessPieces extends Component {
     start() {
         this._initEvent();
 
-        this._setPieceBlackIsShow(true);
-        // this._setPieceWhiteIsShow(false);
+        this._setPieceBlackIsShow(false);
+        this._setPieceWhiteIsShow(false);
     }
 
     private _initEvent() {
@@ -60,9 +60,9 @@ export class ChessPieces extends Component {
             return;
         }
 
-        if (this._curChessPieceType == ChessPiecesType.CT_Empty) {
-            return;
-        }
+        // if (this._curChessPieceType == ChessPiecesType.CT_Empty) {
+        //     return;
+        // }
         if (GameData.getIns().myRoleType == GameRoleType.GRT_Black) {
             this._curChessPieceType = ChessPiecesType.CT_Black;
         } else if (GameData.getIns().myRoleType == GameRoleType.GRT_White) {

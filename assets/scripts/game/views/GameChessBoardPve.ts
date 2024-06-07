@@ -2,7 +2,7 @@
  * @Author: super_javan 296652579@qq.com
  * @Date: 2024-06-03 20:40:36
  * @LastEditors: super_javan 296652579@qq.com
- * @LastEditTime: 2024-06-05 20:17:30
+ * @LastEditTime: 2024-06-06 20:48:29
  * @FilePath: /FiveChess/assets/scripts/game/views/GameChessBoardPve.ts
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -66,15 +66,72 @@ export class GameChessBoardPve extends Component {
     }
 
     private _onClickPutDownChessPieceCallBack(data: any): void {
+        console.log("_onClickPutDownChessPieceCallBack", data);
+    }
 
+    /**
+     * @description: 玩家下棋
+     * @param {ChessPiecesType} chessPieceType
+     * @return {*}
+     */
+    private _playerPutDownChessPiece(posIndex: number): void {
+        let chessPieceItem = this.chessPieceListNode.children[posIndex];
+        if (!chessPieceItem)
+            return;
+
+        let comp = chessPieceItem.getComponent(ChessPieces);
+        if (!comp)
+            return;
+
+        let chessPieceType = GameData.getIns().getChessPieceType();
+        comp.updateWithData(chessPieceType);
+        this._curPiecePosIndex = posIndex;
+        this._checkIsGameOver();
     }
 
     private _initUIData(): void {
         this._resetChessBoradUI();
+        this._initFiveTupleGroup();
     }
 
+    /**
+     * @description: 初始化五元组
+     * @return {*}
+     */
     private _initFiveTupleGroup(): void {
+        this._fiveTupleGroup = [];
+        let totalRowOrCol: number = 18;
+        let perCheckCount: number = 14;
 
+        //横向五元祖占位
+        for (let y = 0; y < totalRowOrCol; y++) {
+            for (let x = 0; x < perCheckCount; x++) {
+                this._fiveTupleGroup.push([y * totalRowOrCol + x, y * totalRowOrCol + x + 1, y * totalRowOrCol + x + 2, y * totalRowOrCol + x + 3, y * totalRowOrCol + x + 4]);
+            }
+        }
+
+        //纵向五元组占位
+        for (let x = 0; x < totalRowOrCol; x++) {
+            for (let y = 0; y < perCheckCount; y++) {
+                this._fiveTupleGroup.push([x + y * totalRowOrCol, x + (y + 1) * totalRowOrCol, x + (y + 2) * totalRowOrCol, x + (y + 3) * totalRowOrCol, x + (y + 4) * totalRowOrCol]);
+            }
+        }
+
+        //左上到右下五元组占位
+        for (let y = 0; y < perCheckCount; y++) {
+            for (let x = 0; x < perCheckCount; x++) {
+                this._fiveTupleGroup.push([y * totalRowOrCol + x, (y + 1) * totalRowOrCol + x + 1, (y + 2) * totalRowOrCol + x + 2, (y + 3) * totalRowOrCol + x + 3, (y + 4) * totalRowOrCol + x + 4]);
+            }
+        }
+
+        //左下到右上五元组占位
+        for (let y = 4; y < totalRowOrCol; y++) {
+            for (let x = 0; x < perCheckCount; x++) {
+                this._fiveTupleGroup.push([y * totalRowOrCol + x, (y - 1) * totalRowOrCol + x + 1, (y - 2) * totalRowOrCol + x + 2, (y - 3) * totalRowOrCol + x + 3, (y - 4) * totalRowOrCol + x + 4]);
+            }
+        }
+
+        console.log("_fiveTupleGroup", this._fiveTupleGroup);
     }
 
     private _resetChessBoradUI(): void {
@@ -113,7 +170,7 @@ export class GameChessBoardPve extends Component {
         this._setBtnNodeStatus(true);
 
         if (this.touchBlockNode) {
-            this.touchBlockNode.active = true;
+            this.touchBlockNode.active = false;
         }
 
         if (this.tipNode.getComponent(Label)) {
@@ -178,6 +235,10 @@ export class GameChessBoardPve extends Component {
         if (this.topNode) {
             this.topNode.active = true;
         }
+    }
+
+    private _checkIsGameOver(): void {
+
     }
 
     //点击玩家先手
