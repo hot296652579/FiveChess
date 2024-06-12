@@ -2,17 +2,19 @@
  * @Author: super_javan 296652579@qq.com
  * @Date: 2024-06-03 20:40:36
  * @LastEditors: super_javan 296652579@qq.com
- * @LastEditTime: 2024-06-06 20:48:29
+ * @LastEditTime: 2024-06-12 15:14:25
  * @FilePath: /FiveChess/assets/scripts/game/views/GameChessBoardPve.ts
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
 import { _decorator, Component, EventTouch, instantiate, Label, Node, Prefab } from 'cc';
-import { ChessBlockInfos, ChessPiecesType, GameLanguageKey, GameRoleType, GameWhoFirstPutDownType } from '../common/GameConst';
+import { ChessBlockInfos, ChessPiecesType, GameLanguageKey, GameRoleType, GameSceneName, GameWhoFirstPutDownType } from '../common/GameConst';
 import { GameData } from '../data/GameData';
 import { ChessPieces } from './ChessPieces';
 import { eventMgr } from '../core/base/EventMgr';
 import { GameEvent } from '../common/GameEvent';
 import { uimgr } from '../mgr/uimgr/UIMgr';
+import { GameUtils } from '../common/GameUtils';
+import { IPopViewData } from './PopView';
 const { ccclass, property } = _decorator;
 // 棋盘 col-18 row-18
 @ccclass('GameChessBoardPve')
@@ -67,6 +69,11 @@ export class GameChessBoardPve extends Component {
 
     private _onClickPutDownChessPieceCallBack(data: any): void {
         console.log("_onClickPutDownChessPieceCallBack", data);
+        if (!data)
+            return;
+
+        const { index } = data;
+        this._putDownChessPiece(index);
     }
 
     /**
@@ -74,7 +81,7 @@ export class GameChessBoardPve extends Component {
      * @param {ChessPiecesType} chessPieceType
      * @return {*}
      */
-    private _playerPutDownChessPiece(posIndex: number): void {
+    private _putDownChessPiece(posIndex: number): void {
         let chessPieceItem = this.chessPieceListNode.children[posIndex];
         if (!chessPieceItem)
             return;
@@ -144,6 +151,7 @@ export class GameChessBoardPve extends Component {
         let originPosY = ChessBlockInfos.CBI_AlignOriginPosY as number;
         let originAlignXY = ChessBlockInfos.CBI_AlignXY as number;
         let index = 0;
+        this._curPiecePosIndex = -1;
 
         for (let i = 0; i < ChessBlockInfos.CBI_Row; i++) {
             for (let j = 0; j < ChessBlockInfos.CBI_Col; j++) {
@@ -211,13 +219,13 @@ export class GameChessBoardPve extends Component {
 
             //中心点位置
             let centerIndexPos: number = (ChessBlockInfos.CBI_Row * ChessBlockInfos.CBI_Col - 1) / 2;
-            let itemNode = this.chessPieceListNode.children[centerIndexPos];
+            let itemNode = this.chessPieceListNode.children[Math.floor(centerIndexPos)];
             if (!itemNode)
                 return;
 
             let comp = itemNode.getComponent(ChessPieces);
             if (comp) {
-                comp.updateWithData(ChessPiecesType.CT_White);
+                comp.updateWithData(ChessPiecesType.CT_White, centerIndexPos, ChessBlockInfos.CBI_Row / 2, (ChessBlockInfos.CBI_Col - 1) / 2);
             }
             GameData.getIns().turnWhoRoleType = GameRoleType.GRT_White;
         }
@@ -237,8 +245,315 @@ export class GameChessBoardPve extends Component {
         }
     }
 
-    private _checkIsGameOver(): void {
+    /**
+     * @description: ai下棋
+     * @return {*}
+     */
+    private _AIPutDownChessPiece(): void {
+        if (this._fiveTupleGroup.length <= 0)
+            return;
 
+        let _fiveTupleGroupScore: number[] = [];
+        for (let i = 0; i < this._fiveTupleGroup.length; i++) {
+            let blackCount: number = 0;
+            let whiteCount: number = 0;
+
+            for (let j = 0; j < this._fiveTupleGroup[i].length; j++) {
+                let index = this._fiveTupleGroup[i][j];
+                let item = this.chessPieceListNode.children[index];
+                if (!item) {
+                    continue;
+                }
+
+                let comp = item.getComponent(ChessPieces);
+                if (!comp) {
+                    continue;
+                }
+
+                let chessPieceType = comp.getCurChessPieceTypeColor();
+                if (chessPieceType === ChessPiecesType.CT_Black) {
+                    blackCount++;
+                } else if (chessPieceType === ChessPiecesType.CT_White) {
+                    whiteCount++;
+                }
+            }
+
+            if (blackCount === 0 && whiteCount === 0) {
+                _fiveTupleGroupScore[i] = 1;
+            } else if (blackCount > 0 && whiteCount > 0) {
+                _fiveTupleGroupScore[i] = 0;
+            } else if (whiteCount === 4) {
+                _fiveTupleGroupScore[i] = 10;
+            } else if (blackCount === 4) {
+                _fiveTupleGroupScore[i] = 9;
+            } else if (whiteCount === 3) {
+                _fiveTupleGroupScore[i] = 8;
+            } else if (blackCount === 3) {
+                _fiveTupleGroupScore[i] = 7;
+            } else if (whiteCount === 2) {
+                _fiveTupleGroupScore[i] = 6;
+            } else if (blackCount === 2) {
+                _fiveTupleGroupScore[i] = 5;
+            } else if (whiteCount === 1) {
+                _fiveTupleGroupScore[i] = 4;
+            } else if (blackCount === 1) {
+                _fiveTupleGroupScore[i] = 3;
+            }
+        }
+
+        //找到最大的五元组
+        let index1: number = 0;
+        let maxScore: number = 0;
+        for (let i = 0; i < _fiveTupleGroupScore.length; i++) {
+            if (_fiveTupleGroupScore[i] === 10) {
+                index1 = i;
+            }
+
+            if (_fiveTupleGroupScore[i] > maxScore) {
+                maxScore = _fiveTupleGroupScore[i];
+                index1 = i;
+            }
+        }
+
+        //找到五元组中落子位置，落子最好的位置在有棋子的旁边
+        let index2: number = 0;
+        let isBestPutDown: boolean = false;
+        for (let n = 0; n < this._fiveTupleGroup[index1].length; n++) {
+            let posIndex = this._fiveTupleGroup[index1][n];
+            let item = this.chessPieceListNode.children[posIndex];
+
+            if (!item) {
+                continue;
+            }
+
+            let comp = item.getComponent(ChessPieces);
+            if (!comp) {
+                continue;
+            }
+
+            let chessPieceType = comp.getCurChessPieceTypeColor();
+            if (!isBestPutDown && chessPieceType === ChessPiecesType.CT_Empty) {
+                index2 = n;
+            }
+
+            if (!isBestPutDown && chessPieceType != ChessPiecesType.CT_Empty) {
+                isBestPutDown = true;
+            }
+
+            if (!isBestPutDown && chessPieceType == ChessPiecesType.CT_Empty) {
+                index2 = n;
+                break
+            }
+        }
+
+        let pos: number = this._fiveTupleGroup[index1][index2];
+        if (pos) {
+            GameData.getIns().turnWhoRoleType = GameRoleType.GRT_White;
+            this._putDownChessPiece(pos);
+        }
+    }
+
+    /**
+     * @description: 检测五子是否连珠
+     * @return {*}
+     */
+    private _checkIsConnectFievePiece(): boolean {
+        let row_x: number = this._curPiecePosIndex % ChessBlockInfos.CBI_Row;
+        let row_y: number = Math.floor(this._curPiecePosIndex / ChessBlockInfos.CBI_Row);
+
+        let curTurnWhoRoleType = GameData.getIns().turnWhoRoleType;
+
+        let checkChessPieceType: ChessPiecesType = ChessPiecesType.CT_Empty;
+        if (curTurnWhoRoleType === GameRoleType.GRT_Black) {
+            checkChessPieceType = ChessPiecesType.CT_Black;
+        } else if (curTurnWhoRoleType === GameRoleType.GRT_White) {
+            checkChessPieceType = ChessPiecesType.CT_White;
+        } else {
+            return false;
+        }
+
+        //检测横向
+        let num: number = 1;
+        for (let x = row_x - 1; x >= 0; x--) {
+            if (this._checkChessPiecePutDown(row_y * ChessBlockInfos.CBI_Row + x, checkChessPieceType)) {
+                num++;
+            } else {
+                break;
+            }
+        }
+
+        if (num >= 5) {
+            return true;
+        }
+
+        for (let x = row_x + 1; x < ChessBlockInfos.CBI_Row; x++) {
+            if (this._checkChessPiecePutDown(row_y * ChessBlockInfos.CBI_Row + x, checkChessPieceType)) {
+                num++;
+            } else {
+                break;
+            }
+        }
+
+        if (num >= 5) {
+            return true;
+        }
+
+        //检测纵向
+        num = 1;
+        for (let y = row_y - 1; y >= 0; y--) {
+            if (this._checkChessPiecePutDown(y * ChessBlockInfos.CBI_Col + row_x, checkChessPieceType)) {
+                num++;
+            } else {
+                break;
+            }
+        }
+
+        if (num >= 5) {
+            return true;
+        }
+
+        for (let y = row_y + 1; y <= ChessBlockInfos.CBI_Col; y++) {
+            if (this._checkChessPiecePutDown(y * ChessBlockInfos.CBI_Col + row_x, checkChessPieceType)) {
+                num++;
+            } else {
+                break;
+            }
+        }
+
+        if (num >= 5) {
+            return true;
+        }
+
+        //检测左上到右下
+        num = 1;
+        //zuo shang
+        for (let x = row_x - 1; x >= 0; x--) {
+            let index = (row_y - (row_x - x)) * ChessBlockInfos.CBI_Row + x;
+            if (this._checkChessPiecePutDown(index, checkChessPieceType)) {
+                num++;
+            } else {
+                break;
+            }
+        }
+
+        if (num >= 5) {
+            return true;
+        }
+
+        //you xia
+        for (let x = row_x + 1; x < ChessBlockInfos.CBI_Row; x++) {
+            let index = (row_y + (x - row_x)) * ChessBlockInfos.CBI_Row + x;
+            if (this._checkChessPiecePutDown(index, checkChessPieceType)) {
+                num++;
+            } else {
+                break;
+            }
+        }
+
+        if (num >= 5) {
+            return true;
+        }
+
+        //左下右上
+        //zuo xia
+        num = 1;
+        for (let x = row_x - 1; x >= 0; x--) {
+            let index = (row_y + (row_x - x)) * ChessBlockInfos.CBI_Row + x;
+            if (this._checkChessPiecePutDown(index, checkChessPieceType)) {
+                num++;
+            }
+            else {
+                break;
+            }
+        }
+
+        if (num >= 5) {
+            return true;
+        }
+
+        //you shang
+        for (let x = row_x + 1; x < ChessBlockInfos.CBI_Row; x++) {
+            let index = (row_y - (x - row_x)) * ChessBlockInfos.CBI_Row + x;
+            if (this._checkChessPiecePutDown(index, checkChessPieceType)) {
+                num++;
+            }
+            else {
+                break;
+            }
+        }
+
+        if (num >= 5) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * @description: 检测是否为同一棋子
+     * @param {number} posIndex
+     * @param {ChessPiecesType} checkChessPieceType
+     * @return {*}
+     */
+    private _checkChessPiecePutDown(posIndex: number, checkChessPieceType: ChessPiecesType): boolean {
+        let chessPieceItem = this.chessPieceListNode.children[posIndex];
+        if (!chessPieceItem)
+            return false;
+
+        let comp = chessPieceItem.getComponent(ChessPieces);
+        if (!comp)
+            return false;
+
+        let chessPieceType: ChessPiecesType = comp.getCurChessPieceTypeColor();
+        if (chessPieceType == checkChessPieceType) {
+            return true;
+        }
+        return false;
+    }
+
+    private _checkIsGameOver(): void {
+        let isMan5GameOver = this._checkIsConnectFievePiece();
+        let isTurnMyPlayer: boolean = false;
+        if (GameData.getIns().turnWhoRoleType === GameData.getIns().myRoleType) {
+            isTurnMyPlayer = true;
+        }
+
+        if (isMan5GameOver) {
+            let strTips: string = isTurnMyPlayer ? `${GameLanguageKey.GLK_PlayerWin}` : `${GameLanguageKey.GLK_AiWin}`;
+            const data: IPopViewData = {
+                content: `${strTips}`,
+                title: `${GameLanguageKey.GLK_GameOVer}`,
+                btnDes: `${GameLanguageKey.GLK_RestarGame}`,
+                closeCallback: () => {
+                    GameUtils.switchScene(GameSceneName.GSC_Hall);
+                },
+                resetCallback: () => {
+                    this._resetChessBoradUI();
+                }
+            }
+            uimgr.showPopView(data);
+        } else {
+            GameData.getIns().turnWhoRoleType = isTurnMyPlayer ? GameRoleType.GRT_White : GameRoleType.GRT_Black;
+            if (isTurnMyPlayer) {
+                this._setWaitTouchBlockShild(true);
+                GameData.getIns().turnWhoRoleType = GameData.getIns().getOtherRoleType();
+                this.scheduleOnce(() => {
+                    //AI put down
+                    this._AIPutDownChessPiece();
+                    GameData.getIns().turnWhoRoleType = GameData.getIns().myRoleType;
+                }, 1)
+            } else {
+                this._setWaitTouchBlockShild(false);
+            }
+        }
+    }
+
+    private _setWaitTouchBlockShild(status: boolean): void {
+        if (this.touchBlockNode) {
+            if (this.touchBlockNode) {
+                this.touchBlockNode.active = status;
+            }
+        }
     }
 
     //点击玩家先手
