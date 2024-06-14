@@ -1,9 +1,9 @@
 /*
  * @Author: super_javan 296652579@qq.com
- * @Date: 2024-06-12 16:50:30
+ * @Date: 2024-06-14 10:47:18
  * @LastEditors: super_javan 296652579@qq.com
- * @LastEditTime: 2024-06-14 14:25:34
- * @FilePath: /FiveChess/assets/scripts/game/core/base/net/WsNetCmd.ts
+ * @LastEditTime: 2024-06-14 14:36:10
+ * @FilePath: /FiveChess/server/src/game/ws/const/WsNetCmd.ts
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
 

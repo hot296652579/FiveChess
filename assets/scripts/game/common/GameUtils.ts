@@ -1,11 +1,12 @@
 import { SceneAsset, director } from "cc";
 import { GameSceneName } from "./GameConst";
+import WsMgr from "../core/base/net/WebScoketMgr";
 
 /*
  * @Author: super_javan 296652579@qq.com
  * @Date: 2024-05-27 17:21:09
  * @LastEditors: super_javan 296652579@qq.com
- * @LastEditTime: 2024-05-27 17:36:37
+ * @LastEditTime: 2024-06-14 10:39:44
  * @FilePath: /FiveChess/assets/scripts/game/common/GameUtils.ts
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -16,12 +17,15 @@ export class GameUtils {
      * @return {*}
      */
     public static switchScene(sceneName: GameSceneName): void {
+        WsMgr.isChangeSecene = true;
         director.preloadScene(sceneName, (err: Error, scene: SceneAsset) => {
             if (err) {
                 console.log('switchScene error:', err);
                 return
             }
-            director.loadScene(sceneName);
+            director.loadScene(sceneName, () => {
+                WsMgr.isChangeSecene = false;
+            });
         })
     }
 
