@@ -2,14 +2,13 @@
  * @Author: super_javan 296652579@qq.com
  * @Date: 2024-05-27 16:47:25
  * @LastEditors: super_javan 296652579@qq.com
- * @LastEditTime: 2024-06-02 21:47:03
+ * @LastEditTime: 2024-06-17 15:10:46
  * @FilePath: /FiveChess/assets/scripts/game/views/LoginView.ts
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
 import { _decorator, Component, EditBox, Node } from 'cc';
 import { GameUtils } from '../common/GameUtils';
 import { GameLanguageKey, NetCodeConst } from '../common/GameConst';
-import { eventMgr, EventMgr } from '../core/base/EventMgr';
 import { ToastView } from './ToastView';
 import { httpMgr } from '../core/base/HttpMgr';
 import { GameHost } from '../common/GameHost';
@@ -18,6 +17,8 @@ import { JsCrypt_PublicKey } from '../common/GameSecret';
 import { GamePlayerData } from '../data/GamePlayerData';
 import { GameData } from '../data/GameData';
 import { GameEvent } from '../common/GameEvent';
+import eventMgr from '../core/base/EventMgr';
+import WsMgr from '../core/base/net/WebScoketMgr';
 const { ccclass, property } = _decorator;
 
 const TAG = 'LoginView';

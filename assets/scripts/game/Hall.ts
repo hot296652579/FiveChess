@@ -2,7 +2,7 @@
  * @Author: super_javan 296652579@qq.com
  * @Date: 2024-05-27 16:02:25
  * @LastEditors: super_javan 296652579@qq.com
- * @LastEditTime: 2024-06-13 16:06:19
+ * @LastEditTime: 2024-06-17 15:15:33
  * @FilePath: /FiveChess/assets/scripts/game/Hall.ts
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -16,6 +16,8 @@ import { GameUtils } from './common/GameUtils';
 import { GameEvent } from './common/GameEvent';
 import eventMgr from './core/base/EventMgr';
 import WsMgr from './core/base/net/WebScoketMgr';
+import { GameHost } from './common/GameHost';
+import { GamePlayerData } from './data/GamePlayerData';
 
 const { ccclass, property } = _decorator;
 
@@ -40,6 +42,15 @@ export class Hall extends Component {
         //test arraybuffer
         // const test: Uint8Array = new Uint8Array([228, 189, 160, 229, 165, 189]);
         // WsMgr.arrayBufferToString(test);
+
+        //test ws connect
+        let playerData = new GamePlayerData();
+        playerData.password = '123456'
+        playerData.uname = 'super_javan';
+        playerData.uid = '9527';
+
+        GameData.getIns().curPlayerData = playerData;
+        WsMgr.connect(GameHost.gameRouteUrlWs);
     }
 
     private _initializeEevent() {
@@ -73,6 +84,7 @@ export class Hall extends Component {
         if (result) {
             this.loginView.active = !result;
             this.selectGameNode.active = result;
+            WsMgr.connect(GameHost.gameRouteUrlWs);
         }
         uimgr.showTipsView(msg);
     }

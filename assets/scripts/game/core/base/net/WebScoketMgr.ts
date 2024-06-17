@@ -2,7 +2,7 @@
  * @Author: super_javan 296652579@qq.com
  * @Date: 2024-06-12 16:45:11
  * @LastEditors: super_javan 296652579@qq.com
- * @LastEditTime: 2024-06-14 14:25:55
+ * @LastEditTime: 2024-06-17 15:49:11
  * @FilePath: /FiveChess/assets/scripts/game/core/base/net/WsMgr.ts
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -75,6 +75,7 @@ export class WebScoketMgr extends Single {
         let arraybuffer = event.data;
         let uint8Array = new Uint8Array(arraybuffer);
         let bufferStr = this.arrayBufferToString(uint8Array);
+        console.log(TAG, '服务器发来的数据:', bufferStr);
         let obj: IWsNetMsg = JSON.parse(bufferStr);
         if (!obj)
             return;
@@ -114,6 +115,7 @@ export class WebScoketMgr extends Single {
         let bufferStr = JSON.stringify(msg);
         let uint8Array = this.str2Uint8Array(bufferStr);
         this._ws.send(uint8Array);
+        console.log(TAG, "cocos client send:", bufferStr);
     }
 
     public str2Uint8Array(str: string): Uint8Array {
